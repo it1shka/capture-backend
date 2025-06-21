@@ -15,10 +15,11 @@ class DocumentService (
   private val documentUserAccessRepository: DocumentUserAccessRepository,
 ) {
 
-  fun createDocument(document: CreateDocumentDTO, userId: String): Mono<Document> {
+  fun createDocument(createDocumentDTO: CreateDocumentDTO, userId: String): Mono<Document> {
+    val (title, description) = createDocumentDTO
     val document = Document(
-      title = document.title,
-      description = document.description,
+      title = title,
+      description = description,
     )
     return documentRepository.save(document).flatMap { savedDocument ->
       val documentUserAccess = DocumentUserAccess(
