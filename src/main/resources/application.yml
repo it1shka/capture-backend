@@ -5,7 +5,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_URL:http://localhost:8084/realms/capture}
+          issuer-uri: ${KEYCLOAK_URL:http://localhost:8084/auth/realms/capture}
   r2dbc:
     url: ${DATABASE_URL:r2dbc:postgresql://localhost:5433/capture}
     username: ${DATABASE_USERNAME:postgres}
@@ -25,3 +25,5 @@ logging:
   level:
     org.flywaydb: DEBUG
     org.springframework.boot.autoconfigure.flyway: DEBUG
+server:
+  port: ${APP_PORT:8088}
