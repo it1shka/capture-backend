@@ -1,11 +1,15 @@
 spring:
   application:
     name: "capture"
-  datasource:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:http://localhost:8084/realms/capture}
+  r2dbc:
     url: ${DATABASE_URL:r2dbc:postgresql://localhost:5433}
     username: ${DATABASE_USERNAME:postgres}
     password: ${DATABASE_PASSWORD:admin}
-    driver-class-name: org.postgresql.Driver
   data:
     r2dbc:
       repositories:

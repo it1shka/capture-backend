@@ -14,13 +14,8 @@ interface DocumentRepository : ReactiveCrudRepository<Document, UUID> {
     FROM documents
     WHERE lower(title) LIKE lower(:prefix) || '%' 
     ORDER BY title 
-    LIMIT :pageSize 
+    LIMIT :limit
     OFFSET :offset
   """)
-  fun findByPrefixWithOffset(prefix: String, pageSize: Int, offset: Int): Flux<Document>
-
-  fun findByPrefixWithPage(prefix: String, page: Int, pageSize: Int): Flux<Document> {
-    val offset = page * pageSize
-    return findByPrefixWithOffset(prefix, pageSize, offset)
-  }
+  fun findByTitleStartingWithIgnoreCase(prefix: String, limit: Int, offset: Int): Flux<Document>
 }
