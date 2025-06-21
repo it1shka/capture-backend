@@ -8,13 +8,13 @@ CREATE TABLE documents (
                            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TYPE document_role AS ENUM ('AUTHOR', 'EDITOR', 'VIEWER');
+-- CREATE TYPE document_role AS ENUM ('AUTHOR', 'EDITOR', 'VIEWER');
 
 CREATE TABLE document_user_access (
                                       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                                       document_id UUID NOT NULL,
                                       user_id VARCHAR(255) NOT NULL,
-                                      role document_role NOT NULL,
+                                      role VARCHAR(10) NOT NULL,
                                       CONSTRAINT fk_document_user_access_document
                                           FOREIGN KEY (document_id) REFERENCES documents(id) ON DELETE CASCADE
 );
