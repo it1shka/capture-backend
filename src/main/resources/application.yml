@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: "capture"
+  datasource:
+    url: ${DATABASE_URL:r2dbc:postgresql://localhost:5433}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:admin}
+    driver-class-name: org.postgresql.Driver
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
