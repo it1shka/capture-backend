@@ -3,11 +3,13 @@ package com.it1shka.capture.controllers
 
 import com.it1shka.capture.database.Document
 import com.it1shka.capture.dtos.CreateDocumentDTO
+import com.it1shka.capture.dtos.UpdateDocumentDTO
 import com.it1shka.capture.services.DocumentService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -45,6 +47,16 @@ class DocumentController (
     val userId = jwt.subject
     val (title, description) = document
     return documentService.createDocument(userId, title, description)
+  }
+
+  @PutMapping
+  fun updateDocument(
+    @AuthenticationPrincipal jwt: Jwt,
+    @RequestBody document: UpdateDocumentDTO,
+  ): Mono<Document> {
+    val userId = jwt.subject
+    val (id, title, description, text_content, canvas_content) = document
+    return documentService.updateDocument(userId, id, title, description, text_content, canvas_content)
   }
 
 }

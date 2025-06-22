@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component
 enum class DocumentRole {
   AUTHOR,
   EDITOR,
-  VIEWER
+  VIEWER;
+  
+  fun canEdit() : Boolean = this == AUTHOR || this == EDITOR
 }
 
 @Component
