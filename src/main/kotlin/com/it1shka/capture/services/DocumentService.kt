@@ -63,6 +63,7 @@ class DocumentService(
     }
   }
 
+
   fun updateDocument(
     userId: String,
     documentId: UUID,
@@ -86,6 +87,20 @@ class DocumentService(
           canvasContent = canvasContent ?: existingDocument.canvasContent
         )
         documentRepository.save(updatedDocument)
+      }
+  }
+
+  fun deleteDocument(userId: String, documentId: UUID): Mono<Unit> {
+    return documentRepository.findById(documentId)
+      .switchIfEmpty(Mono.error(NoSuchElementException("Document not found")))
+      .flatMap { document ->
+        documentUserAccessRepository.findByUserIdAndDocumentId(userId, documentId)
+          .filter { access -> access.role.canDelete() }
+          .switchIfEmpty(Mono.error(SecurityException("User doesn't have permission")))
+          .then(
+            documentUserAccessRepository.deleteByDocumentId(documentId)
+             .then(documentRepository.delete(document))
+          )
       }
   }
 

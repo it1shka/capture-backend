@@ -10,8 +10,9 @@ enum class DocumentRole {
   AUTHOR,
   EDITOR,
   VIEWER;
-
-  fun canEdit(): Boolean = this == AUTHOR || this == EDITOR
+  
+  fun canEdit() : Boolean = this == AUTHOR || this == EDITOR
+  fun canDelete() : Boolean = this == AUTHOR
 }
 
 @Component
