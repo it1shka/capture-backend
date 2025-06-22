@@ -10,7 +10,7 @@ import java.time.Instant
 import java.util.*
 
 @Table("documents")
-data class Document (
+data class Document(
   @Id
   val id: UUID? = null,
 
@@ -24,7 +24,7 @@ data class Document (
   val textContent: String? = null,
 
   @Column("canvas_content")
-  val canvasContent: JsonNode? = null,
+  val canvasContent: String? = null,
 
   @CreatedDate
   @Column("created_at")

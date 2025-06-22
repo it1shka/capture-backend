@@ -48,6 +48,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-database-postgresql")
 	runtimeOnly("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("org.postgresql:r2dbc-postgresql")
 }
 
 kotlin {

@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class CaptureApplication
 
 fun main(args: Array<String>) {
-	runApplication<CaptureApplication>(*args)
+  runApplication<CaptureApplication>(*args)
 }

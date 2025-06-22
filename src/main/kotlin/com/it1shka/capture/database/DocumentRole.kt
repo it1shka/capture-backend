@@ -13,6 +13,7 @@ enum class DocumentRole {
   
   fun canEdit() : Boolean = this == AUTHOR || this == EDITOR
   fun canDelete() : Boolean = this == AUTHOR
+
   fun getRank(): Int {
         return when (this) {
             AUTHOR -> 2
@@ -20,6 +21,7 @@ enum class DocumentRole {
             VIEWER -> 0
         }
     }
+
 }
 
 @Component
