@@ -9,13 +9,22 @@ import java.util.UUID
 @Repository
 interface DocumentRepository : ReactiveCrudRepository<Document, UUID> {
   @Query("""
-    SELECT 
-        *
-    FROM documents
-    WHERE lower(title) LIKE lower(:prefix) || '%' 
-    ORDER BY title 
-    LIMIT :limit
-    OFFSET :offset
+    select
+        doc.*
+    from documents doc
+    join document_user_access access
+        on doc.id = access.document_id
+    where
+        access.user_id = :userId and
+        lower(doc.title) like concat(lower(:titlePrefix), '%')
+    order by doc.updated_at desc
+    limit :limit
+    offset :offset
   """)
-  fun findByTitleStartingWithIgnoreCase(prefix: String, limit: Int, offset: Int): Flux<Document>
+  fun performSearch(
+    userId: String,
+    titlePrefix: String,
+    limit: Int,
+    offset: Int
+  ): Flux<Document>
 }
