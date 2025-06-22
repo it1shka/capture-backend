@@ -12,6 +12,7 @@ enum class DocumentRole {
   VIEWER;
   
   fun canEdit() : Boolean = this == AUTHOR || this == EDITOR
+  fun canDelete() : Boolean = this == AUTHOR
 }
 
 @Component

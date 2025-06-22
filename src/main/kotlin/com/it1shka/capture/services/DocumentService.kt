@@ -10,8 +10,6 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import com.fasterxml.jackson.databind.JsonNode
 import java.util.UUID
-import org.springframework.http.HttpStatus
-import org.springframework.web.server.ResponseStatusException
 
 @Service
 class DocumentService(
@@ -51,22 +49,37 @@ class DocumentService(
   }
 
   fun updateDocument(userId: String, documentId: UUID, title: String? = null, description: String? = null, textContent: String? = null, canvasContent: JsonNode? = null): Mono<Document> {
-    return documentUserAccessRepository.findByUserIdAndDocumentId(userId, documentId)
-        .filter { access -> access.role.canEdit() }
-        .switchIfEmpty(Mono.error(ResponseStatusException(HttpStatus.FORBIDDEN, "User doesn't have permission")))
-        .flatMap { _ ->
-            documentRepository.findById(documentId)
-                .switchIfEmpty(Mono.error(ResponseStatusException(HttpStatus.NOT_FOUND, "Document not found")))
-        }
-        .flatMap { existingDocument ->
-            val updatedDocument = existingDocument.copy(
-                title = title ?: existingDocument.title,
-                description = description ?: existingDocument.description,
-                textContent = textContent ?: existingDocument.textContent,
-                canvasContent = canvasContent ?: existingDocument.canvasContent
-            )
-            documentRepository.save(updatedDocument)
-        }
+    return documentRepository.findById(documentId)
+      .switchIfEmpty(Mono.error(NoSuchElementException("Document not found")))
+      .flatMap { existingDocument ->
+        documentUserAccessRepository.findByUserIdAndDocumentId(userId, documentId)
+          .filter { access -> access.role.canEdit() }
+          .switchIfEmpty(Mono.error(SecurityException("User doesn't have permission")))
+          .thenReturn(existingDocument)
+      }
+      .flatMap { existingDocument ->
+        val updatedDocument = existingDocument.copy(
+          title = title ?: existingDocument.title,
+          description = description ?: existingDocument.description,
+          textContent = textContent ?: existingDocument.textContent,
+          canvasContent = canvasContent ?: existingDocument.canvasContent
+        )
+        documentRepository.save(updatedDocument)
+      }
+  }
+
+  fun deleteDocument(userId: String, documentId: UUID): Mono<Unit> {
+    return documentRepository.findById(documentId)
+      .switchIfEmpty(Mono.error(NoSuchElementException("Document not found")))
+      .flatMap { document ->
+        documentUserAccessRepository.findByUserIdAndDocumentId(userId, documentId)
+          .filter { access -> access.role.canDelete() }
+          .switchIfEmpty(Mono.error(SecurityException("User doesn't have permission")))
+          .then(
+            documentUserAccessRepository.deleteByDocumentId(documentId)
+             .then(documentRepository.delete(document))
+          )
+      }
   }
 
 }
