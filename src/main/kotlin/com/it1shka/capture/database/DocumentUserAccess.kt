@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Table
 import java.util.*
 
 @Table("document_user_access")
-data class DocumentUserAccess (
+data class DocumentUserAccess(
   @Id
   val id: UUID? = null,
 
