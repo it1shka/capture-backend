@@ -8,7 +8,6 @@ import com.it1shka.capture.services.DocumentService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -86,7 +85,7 @@ class DocumentController(
   fun deleteDocument(
     @AuthenticationPrincipal jwt: Jwt,
     @PathVariable id: UUID,
-  ): Mono<Unit> {
+  ): Mono<Void> {
     val userId = jwt.subject
     return documentService.deleteDocument(userId, id)
   }

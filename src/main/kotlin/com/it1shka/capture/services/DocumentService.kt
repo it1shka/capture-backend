@@ -90,7 +90,7 @@ class DocumentService(
       }
   }
 
-  fun deleteDocument(userId: String, documentId: UUID): Mono<Unit> {
+  fun deleteDocument(userId: String, documentId: UUID): Mono<Void> {
     return documentRepository.findById(documentId)
       .switchIfEmpty(Mono.error(NoSuchElementException("Document not found")))
       .flatMap { document ->
