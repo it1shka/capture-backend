@@ -25,7 +25,7 @@ private const val DEFAULT_PAGE_SIZE = 20
 
 @RestController
 @RequestMapping("/document")
-class DocumentController (
+class DocumentController(
   private val documentService: DocumentService,
 ) {
 
@@ -76,8 +76,8 @@ class DocumentController (
     @RequestBody document: UpdateDocumentDTO,
   ): Mono<Document> {
     val userId = jwt.subject
-    val (title, description, text_content, canvas_content) = document
-    return documentService.updateDocument(userId, id, title, description, text_content, canvas_content)
+    val (title, description, textContent, canvasContent) = document
+    return documentService.updateDocument(userId, id, title, description, textContent, canvasContent)
   }
 
 }

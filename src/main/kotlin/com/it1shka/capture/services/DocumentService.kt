@@ -63,23 +63,30 @@ class DocumentService(
     }
   }
 
-  fun updateDocument(userId: String, documentId: UUID, title: String? = null, description: String? = null, textContent: String? = null, canvasContent: JsonNode? = null): Mono<Document> {
+  fun updateDocument(
+    userId: String,
+    documentId: UUID,
+    title: String? = null,
+    description: String? = null,
+    textContent: String? = null,
+    canvasContent: String? = null
+  ): Mono<Document> {
     return documentUserAccessRepository.findByUserIdAndDocumentId(userId, documentId)
-        .filter { access -> access.role.canEdit() }
-        .switchIfEmpty(Mono.error(SecurityException("User doesn't have permission to edit this document")))
-        .flatMap { _ ->
-            documentRepository.findById(documentId)
-                .switchIfEmpty(Mono.error(NoSuchElementException("Document not found")))
-        }
-        .flatMap { existingDocument ->
-            val updatedDocument = existingDocument.copy(
-                title = title ?: existingDocument.title,
-                description = description ?: existingDocument.description,
-                textContent = textContent ?: existingDocument.textContent,
-                canvasContent = canvasContent ?: existingDocument.canvasContent
-            )
-            documentRepository.save(updatedDocument)
-        }
+      .filter { access -> access.role.canEdit() }
+      .switchIfEmpty(Mono.error(SecurityException("User doesn't have permission to edit this document")))
+      .flatMap { _ ->
+        documentRepository.findById(documentId)
+          .switchIfEmpty(Mono.error(NoSuchElementException("Document not found")))
+      }
+      .flatMap { existingDocument ->
+        val updatedDocument = existingDocument.copy(
+          title = title ?: existingDocument.title,
+          description = description ?: existingDocument.description,
+          textContent = textContent ?: existingDocument.textContent,
+          canvasContent = canvasContent ?: existingDocument.canvasContent
+        )
+        documentRepository.save(updatedDocument)
+      }
   }
 
 }
