@@ -11,5 +11,5 @@ interface DocumentUserAccessRepository : ReactiveCrudRepository<DocumentUserAcce
   fun findByUserId(userId: String): Flux<DocumentUserAccess>
   fun findByDocumentId(documentId: UUID): Flux<DocumentUserAccess>
   fun findByUserIdAndDocumentId(userId: String, documentId: UUID): Mono<DocumentUserAccess>
-  fun deleteByDocumentId(documentId: UUID): Mono<Void>
+  fun deleteByDocumentId(documentId: UUID): Mono<Unit>
 }
