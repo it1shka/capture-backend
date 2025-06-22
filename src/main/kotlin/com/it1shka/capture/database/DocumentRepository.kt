@@ -8,7 +8,8 @@ import java.util.UUID
 
 @Repository
 interface DocumentRepository : ReactiveCrudRepository<Document, UUID> {
-  @Query("""
+  @Query(
+    """
     select
         doc.*
     from documents doc
@@ -20,7 +21,8 @@ interface DocumentRepository : ReactiveCrudRepository<Document, UUID> {
     order by doc.updated_at desc
     limit :limit
     offset :offset
-  """)
+  """
+  )
   fun performSearch(
     userId: String,
     titlePrefix: String,
