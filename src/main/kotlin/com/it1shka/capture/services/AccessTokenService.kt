@@ -56,8 +56,8 @@ class AccessTokenService(
       decrypted.split("|").let { parts ->
         UUID.fromString(parts[0]) to DocumentRole.valueOf(parts[1])
       }
-    }.onErrorMap { 
-      IllegalArgumentException("Invalid token format") 
+    }.onErrorMap {
+      IllegalArgumentException("Invalid token format")
     }.flatMap { (documentId, role) ->
       documentRepository.findById(documentId)
         .switchIfEmpty(Mono.error(NoSuchElementException("Document not found")))

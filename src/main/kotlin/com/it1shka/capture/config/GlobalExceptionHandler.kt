@@ -26,4 +26,11 @@ class GlobalExceptionHandler {
       .status(HttpStatus.NOT_FOUND)
       .body(ErrorResponse(ex.message ?: "Resource not found"))
   }
+
+  @ExceptionHandler(IllegalArgumentException::class)
+  fun handleIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<ErrorResponse> {
+    return ResponseEntity
+      .status(HttpStatus.BAD_REQUEST)
+      .body(ErrorResponse("Bad Request"))
+  }
 }

@@ -28,3 +28,6 @@ logging:
     org.springframework.boot.autoconfigure.flyway: DEBUG
 server:
   port: ${APP_PORT:8088}
+
+# needed for access token generation
+INVITE_SECRET: ${VAR_INVITE_SECRET:admin}
