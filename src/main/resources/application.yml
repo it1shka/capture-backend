@@ -5,7 +5,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_URL:http://localhost:8084/auth/realms/capture}
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8084/auth/realms/capture}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://localhost:8084/auth/realms/capture/protocol/openid-connect/certs}
   r2dbc:
     url: ${DATABASE_URL:r2dbc:postgresql://localhost:5433/capture}
     username: ${DATABASE_USERNAME:postgres}
