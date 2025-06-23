@@ -75,7 +75,7 @@ class AccessTokenService(
             )
             .flatMap { existingAccess ->
               // Only modify if new role has higher privileges (lower rank)
-              if (role.getRank() < existingAccess.role.getRank()) {
+              if (role.getRank() > existingAccess.role.getRank()) {
                 documentUserAccessRepository.save(
                   existingAccess.copy(role = role)
                 )
