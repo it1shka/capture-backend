@@ -96,9 +96,7 @@ class DocumentService(
       .flatMap { document ->
         documentUserAccessRepository.findByUserIdAndDocumentId(userId, documentId)
           .filter { access -> access.role.canDelete() }
-          .switchIfEmpty(
-            documentUserAccessRepository.deleteByUserIdAndDocumentId(userId, documentId)
-          )
+          .switchIfEmpty(Mono.error(SecurityException("User doesn't have permission")))
           .then(
             documentUserAccessRepository.deleteByDocumentId(documentId)
              .then(documentRepository.delete(document))
