@@ -95,14 +95,15 @@ class DocumentService(
       .switchIfEmpty(Mono.error(NoSuchElementException("Document not found")))
       .flatMap { document ->
         documentUserAccessRepository.findByUserIdAndDocumentId(userId, documentId)
-          .filter { access -> access.role.canDelete() }
-          .switchIfEmpty(
-            documentUserAccessRepository.deleteByUserIdAndDocumentId(userId, documentId)
-          )
-          .then(
-            documentUserAccessRepository.deleteByDocumentId(documentId)
-             .then(documentRepository.delete(document))
-          )
+          .flatMap { access ->
+            if (access.role.canDelete()) {
+              documentUserAccessRepository.deleteByDocumentId(documentId)
+                .then(documentRepository.delete(document))
+            } else {
+              documentUserAccessRepository.deleteByUserIdAndDocumentId(userId, documentId)
+                .then()
+            }
+          }
       }
   }
 
